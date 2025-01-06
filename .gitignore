@@ -1,1 +1,4 @@
 **/*.xlsx
+/form
+**/__pycache__
+**/.idea

@@ -437,7 +437,7 @@ def domain(source_name, output_name):
             mysheet.print_area += f',{print_area}' if mysheet.print_area else print_area
 
         mysheet.page_setup.fitToWidth = 1  # 将宽度调整为1页
-        mysheet.page_setup.fitToHeight = 1  # 高度限制页数
+        mysheet.page_setup.fitToHeight = False  # 高度限制页数
 
         index += 1
     theSumBook.save(output_name)
