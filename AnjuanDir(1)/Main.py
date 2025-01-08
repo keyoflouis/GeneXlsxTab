@@ -9,7 +9,9 @@ from WriteToTab1 import doWriteToTab1
 
 from WriteToTab2 import dataTab2
 from WriteToTab2 import doWriteToTab2
-
+import tkinter as tk
+from tkinter import filedialog
+from tkinter import messagebox
 
 def format_date(date_str):
     return datetime.strptime(date_str, "%Y%m%d").strftime("%Y年%m月%d日")
@@ -107,12 +109,67 @@ def doMain(source_file, gene_file_Tab1, gene_file_Tab2):
         startIndex = doWriteToTab2(item, gene_file_Tab2, startIndex)
 
 
-if __name__ == "__main__":
-    source_file = "source.xlsx"
-    gene_name_Tab1 = "test.xlsx"
-    gene_name_Tab2 = "test2.xlsx"
+#if __name__ == "__main__":
+#    source_file = "source.xlsx"
+#    gene_name_Tab1 = "test.xlsx"
+#    gene_name_Tab2 = "test2.xlsx"
+#
+#    creatXlsx(gene_name_Tab1)
+#    creatXlsx(gene_name_Tab2)
+#
+#    doMain(source_file, gene_name_Tab1, gene_name_Tab2)
 
+def select_source_file():
+    file_path = filedialog.askopenfilename()
+    if file_path:
+        source_entry.delete(0, tk.END)
+        source_entry.insert(0, file_path)
+
+def generate_files():
+    source_file = source_entry.get()
+    gene_name_Tab1 = tab1_entry.get()
+    gene_name_Tab2 = tab2_entry.get()
+
+    if not source_file:
+        messagebox.showwarning("警告", "请选择 卷内总目录.xlsx 文件")
+        return
+
+    if not gene_name_Tab1:
+        gene_name_Tab1 = "test.xlsx"
+    if not gene_name_Tab2:
+        gene_name_Tab2 = "test2.xlsx"
+
+    # 这里调用你的逻辑函数
     creatXlsx(gene_name_Tab1)
     creatXlsx(gene_name_Tab2)
-
     doMain(source_file, gene_name_Tab1, gene_name_Tab2)
+
+    messagebox.showinfo("完成", "文件生成成功")
+
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("生成 卷案生成.xlsx 和 卷内生成备考表.xlsx")
+
+    tk.Label(root, text="选择 卷内总目录.xlsx 文件:").grid(row=0, column=0, padx=10, pady=10)
+    source_entry = tk.Entry(root, width=50)
+    source_entry.grid(row=0, column=1, padx=10, pady=10)
+    tk.Button(root, text="浏览", command=select_source_file).grid(row=0, column=2, padx=10, pady=10)
+
+    tk.Label(root, text="同名文件会被新文件覆盖，请做好备份！！", fg="red").grid(row=1, column=0, columnspan=3, sticky="w", padx=10, pady=10)
+
+    tk.Label(root, text="生成文件名 卷案生成:").grid(row=2, column=0, padx=10, pady=10)
+    tab1_entry = tk.Entry(root, width=50)
+    tab1_entry.insert(0, "卷案生成.xlsx")
+    tab1_entry.grid(row=2, column=1, padx=10, pady=10)
+
+    tk.Label(root, text="生成文件名 卷内生成备考表:").grid(row=3, column=0, padx=10, pady=10)
+    tab2_entry = tk.Entry(root, width=50)
+    tab2_entry.insert(0, "卷内生成备考表.xlsx")
+    tab2_entry.grid(row=3, column=1, padx=10, pady=10)
+
+    tk.Button(root, text="下一步", command=generate_files).grid(row=4, column=1, padx=10, pady=10)
+
+    root.mainloop()
+
+
+

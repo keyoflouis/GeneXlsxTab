@@ -7,6 +7,8 @@ from openpyxl.styles import Font, Alignment, Border, Side
 from openpyxl.utils import get_column_letter
 from openpyxl.worksheet.page import PageMargins
 from PIL import ImageFont
+import tkinter as tk
+from tkinter import filedialog, messagebox
 
 
 class data:
@@ -444,11 +446,52 @@ def domain(source_name, output_name):
     pass
 
 
-if __name__ == "__main__":
-    output_name = "test.xlsx"
-    source_name = "source2.xlsx"
+def select_source_file():
+    file_path = filedialog.askopenfilename(
+        title="选择 案卷目录.xlsx 或源文件",
+        filetypes=[("Excel files", "*.xlsx")]
+    )
+    if file_path:
+        source_entry.delete(0, tk.END)
+        source_entry.insert(0, file_path)
 
+def generate_file():
+    source_name = source_entry.get()
+    output_name = output_entry.get()
+    if not source_name:
+        messagebox.showwarning("警告", "请先选择 案卷目录.xlsx 文件")
+        return
+    if not output_name:
+        output_name = "卷内总目录生成卷内目录.xlsx"
+    # 这里调用你的逻辑函数
     clearTab(output_name)
     domain(source_name, output_name)
+    messagebox.showinfo("成功", f"文件已生成：{output_name}")
 
-    # getForm()
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("生成 卷内总目录生成卷内目录.xlsx")
+
+    # 创建一个框架来组织控件
+    frame = tk.Frame(root)
+    frame.grid(padx=20, pady=20)
+
+    # 第一行：选择source文件
+    tk.Label(frame, text="选择 案卷目录.xlsx 文件:").grid(row=0, column=0, sticky="w", padx=10, pady=10)
+    source_entry = tk.Entry(frame, width=50)
+    source_entry.grid(row=0, column=1, padx=10, pady=10)
+    tk.Button(frame, text="浏览", command=select_source_file).grid(row=0, column=2, padx=10, pady=10)
+
+    # 第二行：警告信息
+    tk.Label(frame, text="同名文件会被新文件覆盖，请做好备份！！！！", fg="red").grid(row=1, column=0, columnspan=3, sticky="w", padx=10, pady=10)
+
+    # 第三行：输出文件名
+    tk.Label(frame, text="输出文件名 卷内总目录生成卷内目录:").grid(row=2, column=0, sticky="w", padx=10, pady=10)
+    output_entry = tk.Entry(frame, width=50)
+    output_entry.insert(0, "卷内总目录生成卷内目录.xlsx")
+    output_entry.grid(row=2, column=1, padx=10, pady=10)
+
+    # 第四行：下一步按钮
+    tk.Button(frame, text="下一步", command=generate_file).grid(row=3, column=1, padx=10, pady=20)
+
+    root.mainloop()

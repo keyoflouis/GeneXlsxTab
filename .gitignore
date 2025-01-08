@@ -1,4 +1,10 @@
 **/*.xlsx
 /form
-__pycache__/
-.idea/
+AnjuanDir(1)/__pycache__/
+AnjuanDir(1)/.idea/
+
+JuanNeiDir/__pycache__/
+JuanNeiDir/.idea/
+
+**/build
+**/dist
