@@ -106,7 +106,7 @@ def fitData(mainTab=None, sheetName=None, data_list=None):
         data_listALLPage = 0
         for page_num in data_list:
             data_listALLPage += page_num.yeshu
-        print(data_listALLPage)
+
 
 
         if len(data_list) < 11:
@@ -448,7 +448,7 @@ def domain(source_name, output_name):
 
 def select_source_file():
     file_path = filedialog.askopenfilename(
-        title="选择 案卷目录.xlsx 或源文件",
+        title="选择 卷内总目录.xlsx 或源文件",
         filetypes=[("Excel files", "*.xlsx")]
     )
     if file_path:
@@ -459,7 +459,7 @@ def generate_file():
     source_name = source_entry.get()
     output_name = output_entry.get()
     if not source_name:
-        messagebox.showwarning("警告", "请先选择 案卷目录.xlsx 文件")
+        messagebox.showwarning("警告", "请先选择 卷内总目录.xlsx 文件")
         return
     if not output_name:
         output_name = "卷内总目录生成卷内目录.xlsx"
@@ -477,7 +477,7 @@ if __name__ == "__main__":
     frame.grid(padx=20, pady=20)
 
     # 第一行：选择source文件
-    tk.Label(frame, text="选择 案卷目录.xlsx 文件:").grid(row=0, column=0, sticky="w", padx=10, pady=10)
+    tk.Label(frame, text="选择 卷内总目录.xlsx 文件:").grid(row=0, column=0, sticky="w", padx=10, pady=10)
     source_entry = tk.Entry(frame, width=50)
     source_entry.grid(row=0, column=1, padx=10, pady=10)
     tk.Button(frame, text="浏览", command=select_source_file).grid(row=0, column=2, padx=10, pady=10)

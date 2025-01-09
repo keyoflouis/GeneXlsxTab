@@ -120,7 +120,10 @@ def doMain(source_file, gene_file_Tab1, gene_file_Tab2):
 #    doMain(source_file, gene_name_Tab1, gene_name_Tab2)
 
 def select_source_file():
-    file_path = filedialog.askopenfilename()
+    file_path = filedialog.askopenfilename(
+        title="选择 案卷目录.xlsx 或源文件",
+        filetypes=[("Excel files", "*.xlsx")]
+    )
     if file_path:
         source_entry.delete(0, tk.END)
         source_entry.insert(0, file_path)
@@ -131,7 +134,7 @@ def generate_files():
     gene_name_Tab2 = tab2_entry.get()
 
     if not source_file:
-        messagebox.showwarning("警告", "请选择 卷内总目录.xlsx 文件")
+        messagebox.showwarning("警告", "请选择 案卷目录.xlsx 文件")
         return
 
     if not gene_name_Tab1:
@@ -146,11 +149,15 @@ def generate_files():
 
     messagebox.showinfo("完成", "文件生成成功")
 
+
+source_entry:None
+tab1_entry:None
+tab2_entry:None
 if __name__ == "__main__":
     root = tk.Tk()
     root.title("生成 卷案生成.xlsx 和 卷内生成备考表.xlsx")
 
-    tk.Label(root, text="选择 卷内总目录.xlsx 文件:").grid(row=0, column=0, padx=10, pady=10)
+    tk.Label(root, text="选择 案卷目录.xlsx 文件:").grid(row=0, column=0, padx=10, pady=10)
     source_entry = tk.Entry(root, width=50)
     source_entry.grid(row=0, column=1, padx=10, pady=10)
     tk.Button(root, text="浏览", command=select_source_file).grid(row=0, column=2, padx=10, pady=10)
