@@ -12,7 +12,7 @@ from tkinter import filedialog, messagebox
 
 
 class data:
-    def __init__(self, danghao, wenjianbianhao, zerenzhe, wenjiantiming, riqi, yehao ,yeshu):
+    def __init__(self, danghao:str, wenjianbianhao:str, zerenzhe:str, wenjiantiming:str, riqi:str, yehao:int ,yeshu:int):
         self.danghao = danghao
         self.wenjianbianhao = wenjianbianhao
         self.zerenzhe = zerenzhe
@@ -105,7 +105,8 @@ def fitData(mainTab=None, sheetName=None, data_list=None):
 
         data_listALLPage = 0
         for page_num in data_list:
-            data_listALLPage += page_num.yeshu
+            print(f'page_num.yeshu: {page_num.yeshu} ,data_listALLPage: {data_listALLPage}')
+            data_listALLPage += int(page_num.yeshu)
 
 
 

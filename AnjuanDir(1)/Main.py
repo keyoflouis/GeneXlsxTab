@@ -14,6 +14,7 @@ from tkinter import filedialog
 from tkinter import messagebox
 
 def format_date(date_str):
+    print(f'时间日期 :{date_str} ')
     return datetime.strptime(date_str, "%Y%m%d").strftime("%Y年%m月%d日")
 
 
