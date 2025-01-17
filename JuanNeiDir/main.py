@@ -12,7 +12,8 @@ from tkinter import filedialog, messagebox
 
 
 class data:
-    def __init__(self, danghao:str, wenjianbianhao:str, zerenzhe:str, wenjiantiming:str, riqi:str, yehao:int ,yeshu:int):
+    def __init__(self, danghao: str, wenjianbianhao: str, zerenzhe: str, wenjiantiming: str, riqi: str, yehao: int,
+                 yeshu: int):
         self.danghao = danghao
         self.wenjianbianhao = wenjianbianhao
         self.zerenzhe = zerenzhe
@@ -105,9 +106,12 @@ def fitData(mainTab=None, sheetName=None, data_list=None):
 
         data_listALLPage = 0
         for page_num in data_list:
-            print(f'page_num.yeshu: {page_num.yeshu} ,data_listALLPage: {data_listALLPage}')
-            data_listALLPage += int(page_num.yeshu)
-
+            if str(page_num.yeshu).isdigit() and page_num.yeshu != 0:
+                data_listALLPage += int(page_num.yeshu)
+            else:
+                print("页数格式有错或为空")
+                page_num.yeshu = None
+                page_num.yeshu = 0
 
 
         if len(data_list) < 11:
@@ -343,15 +347,34 @@ def sort_key(danghao):
 
 
 def doRead(file_path):
+    # 加载工作簿，只获取单元格的值
     mybook = load_workbook(file_path, data_only=True)
+    # 获取名为"Sheet1"的工作表
     mysheet = mybook["Sheet1"]
 
+    # 初始化数据列表，用于存储所有行的数据
     data_list = []
+
+    # 遍历工作表，从第二行开始
     for row in mysheet.iter_rows(min_row=2, values_only=True):
-        row = [' ' if cell is None else cell for cell in row]
-        data_item = row_insource(*row)
+        # 初始化一个新的行列表，用于存储当前行的数据
+        new_row = []
+
+        # 遍历当前行的每个单元格
+        for cell in row:
+            # 如果单元格为空，则添加空字符串
+            if cell is None:
+                new_row.append(' ')
+            # 否则，添加单元格的值
+            else:
+                new_row.append(cell)
+
+        # 将新行转换为数据项，这里假设有一个函数row_insource可以处理
+        data_item = row_insource(*new_row)
+        # 将数据项添加到数据列表中
         data_list.append(data_item)
 
+    # 返回包含所有数据项的列表
     return data_list
 
 
@@ -387,7 +410,6 @@ def domain(source_name, output_name):
     # 最终需要存储的文件
     theSumBook = Workbook()
 
-
     index = 1
 
     for item in sorted_danghao_list:
@@ -412,17 +434,15 @@ def domain(source_name, output_name):
             # 当第N次写入时，要写入 theSumBook 中的 Sheet 卷内目录N
             mysheet = theSumBook.create_sheet(title="卷内目录" + str(index))
 
-
         ## 设置默认行高和列宽
-        #default_row_height = 15.6
-        #default_column_width = 9.23484848484848
+        # default_row_height = 15.6
+        # default_column_width = 9.23484848484848
         ## 设置所有行的默认行高
-        #for row in range(1, mysheet.max_row + 1):
+        # for row in range(1, mysheet.max_row + 1):
         #    mysheet.row_dimensions[row].height = default_row_height
         ## 设置所有列的默认列宽
-        #for col in range(1, mysheet.max_column + 1):
+        # for col in range(1, mysheet.max_column + 1):
         #    mysheet.column_dimensions[get_column_letter(col)].width = default_column_width
-
 
         theSumBook = fitData(data_list=data_item, mainTab=theSumBook, sheetName=mysheet.title)
         theSumBook = decorate(data_list=data_item, mainTab=theSumBook, sheetName=mysheet.title)
@@ -456,6 +476,7 @@ def select_source_file():
         source_entry.delete(0, tk.END)
         source_entry.insert(0, file_path)
 
+
 def generate_file():
     source_name = source_entry.get()
     output_name = output_entry.get()
@@ -468,6 +489,7 @@ def generate_file():
     clearTab(output_name)
     domain(source_name, output_name)
     messagebox.showinfo("成功", f"文件已生成：{output_name}")
+
 
 if __name__ == "__main__":
     root = tk.Tk()
@@ -484,7 +506,8 @@ if __name__ == "__main__":
     tk.Button(frame, text="浏览", command=select_source_file).grid(row=0, column=2, padx=10, pady=10)
 
     # 第二行：警告信息
-    tk.Label(frame, text="同名文件会被新文件覆盖，请做好备份！！！！", fg="red").grid(row=1, column=0, columnspan=3, sticky="w", padx=10, pady=10)
+    tk.Label(frame, text="同名文件会被新文件覆盖，请做好备份！！！！", fg="red").grid(row=1, column=0, columnspan=3,
+                                                                                 sticky="w", padx=10, pady=10)
 
     # 第三行：输出文件名
     tk.Label(frame, text="输出文件名 卷内总目录生成卷内目录:").grid(row=2, column=0, sticky="w", padx=10, pady=10)

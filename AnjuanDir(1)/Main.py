@@ -14,8 +14,19 @@ from tkinter import filedialog
 from tkinter import messagebox
 
 def format_date(date_str):
-    print(f'时间日期 :{date_str} ')
-    return datetime.strptime(date_str, "%Y%m%d").strftime("%Y年%m月%d日")
+    #print(f'时间日期 :{date_str} ')
+    if len(date_str) == 8:
+        # 处理格式为 YYYYMMDD 的日期
+        result = datetime.strptime(date_str, "%Y%m%d").strftime("%Y年%m月%d日")
+    elif len(date_str) == 6:
+        # 处理格式为 YYYYMM 的日期
+        result = datetime.strptime(date_str, "%Y%m").strftime("%Y年%m月")
+    else:
+        # 处理其他情况
+        result = ' '
+        print("时间日期格式有误，或为空")
+
+    return result
 
 
 def getDataFromSource_ForTab1(source_file):
